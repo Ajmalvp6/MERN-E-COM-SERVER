@@ -2,6 +2,7 @@ const product = require("../models/productsModel");
 
 
 
+
 // add product
 
 exports.addproduct = async (req, res) => {
@@ -80,6 +81,7 @@ exports.allProducts=async (req,res)=>{
 
 
 }
+
 
 
 

@@ -1,5 +1,5 @@
 const express = require('express')
-const { register, login, newCollection, popularinWomen, addtoCart, getCartProducts, removeFromCart } = require('../controllers/userController')
+const { register, login, newCollection, popularinWomen, addtoCart, getCartProducts, removeFromCart, relatedProducts } = require('../controllers/userController')
 const { verifytoken } = require('../middlewares/jwtwebtoken')
 
 const router = new express.Router()
@@ -23,6 +23,8 @@ router.post('/addtocart',verifytoken,addtoCart)
 router.post('/removefromcart',verifytoken,removeFromCart)
 
 router.get('/getcartProducts',verifytoken,getCartProducts)
+
+router.get('/relatedproducts/:productId',relatedProducts)
 
 
 module.exports = router 

@@ -197,3 +197,33 @@ exports.getCartProducts=async(req,res)=>{
   res.json(userData.cartData)
 
 }
+
+
+
+// get related products 
+exports.relatedProducts = async (req, res) => {
+  const { productId } = req.params;
+
+  console.log(productId);
+
+  try {
+    // Find the product by ID
+    const item = await product.findOne({ id: productId });
+
+    if (!item) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Find related products excluding the current product
+    const relatedProducts = await product.find({
+      category: item.category,
+      _id: { $ne: item._id } // Exclude the current product by its ID
+    }).limit(4);
+
+    // Send the response with related products
+    res.status(200).json({ message: "Success", relatedProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+};
