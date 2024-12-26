@@ -112,34 +112,35 @@ exports.addtoCart = async (req, res) => {
     const userId = req.payload;
     const itemId = req.body.itemId;
 
-    // Find the user
+    
     const userData = await users.findOne({ _id: userId });
     if (!userData) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Initialize item if it doesn't exist in the cart
+   
    
  if (!userData.cartData[itemId]) {
       userData.cartData[itemId] = 0;
     }
-    // Increment the item count
+    
     userData.cartData[itemId] += 1;
 
-    // Update the user's cart in the database
+    
     const result = await users.findOneAndUpdate(
       { _id: userId },
       { cartData: userData.cartData },
       { new: true }
     );
 
-    // Respond with the updated cart
-    res.status(200).json({ message: 'success', result: result.cartData });
+   
+    res.status(200).json({ success:true, result: result.cartData });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 
 // remove product from cart 
@@ -159,7 +160,7 @@ exports.removeFromCart = async (req, res) => {
     userData.cartData[itemId] -= 1;
 
     await users.findByIdAndUpdate(
-      userId, // Corrected argument
+      userId, 
       { cartData: userData.cartData } 
     );
 
@@ -207,20 +208,20 @@ exports.relatedProducts = async (req, res) => {
   console.log(productId);
 
   try {
-    // Find the product by ID
+   
     const item = await product.findOne({ id: productId });
 
     if (!item) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Find related products excluding the current product
+    
     const relatedProducts = await product.find({
       category: item.category,
-      _id: { $ne: item._id } // Exclude the current product by its ID
+      _id: { $ne: item._id } 
     }).limit(4);
 
-    // Send the response with related products
+    
     res.status(200).json({ message: "Success", relatedProducts });
   } catch (error) {
     console.error(error);
